@@ -1,10 +1,10 @@
-# Binance Trading Bot
+# Day Trader Dreammachine BTC (Binance)
 
 This project is a trading bot for Binance, consisting of a React frontend and a Node.js backend using MongoDB as the database.
-it trades BTCUSDT pair only for now
-it allows to set autosell order with desirable profit
-example: you setup order to buy portion of BTC (lets say 0.001BTC) for 2000 USDT and you can here set how much you whant to make when you sell this portion of BTC say you want to make 100 USDT profit so when you buy 0.001BTC for 2000 USDT you can set autosell order to sell 0.001BTC for 2100 USDT
-how it works:
+it trades BTCUSDT pair only for now </br>
+### it allows to set autosell order with desirable profit
+example: you setup order to buy portion of BTC (lets say 0.001BTC) for 2000 USDT and you can here set how much you whant to make when you sell this portion of BTC</br> say you want to make 100 USDT profit so when you buy 0.001BTC for 2000 USDT you can set autosell order to sell 0.001BTC for 2100 USDT
+### how it works:
 you create order for 2000 USDT and set autosell order for 2100 USDT
 once the order is filled the bot will automatically sell the BTC when the price reaches the desired profit
 
