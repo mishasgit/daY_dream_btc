@@ -1,5 +1,5 @@
 {
-  "name": "test_crypto_bot",
+  "name": "day-trader-dreammachine-btc",
   "version": "1.0.0",
   "main": "index.js",
   "workspaces": [
