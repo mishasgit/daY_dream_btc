@@ -1,0 +1,24 @@
+{
+  "name": "backend",
+  "version": "1.0.0",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "tsc",
+    "start": "node dist/index.js",
+    "dev": "ts-node-dev --respawn src/index.ts"
+  },
+  "dependencies": {
+    "binance-api-node": "^0.12.7",
+    "dotenv": "^16.4.5",
+    "express": "^4.21.0",
+    "mongodb": "^6.9.0",
+    "mongoose": "^8.6.3"
+  },
+  "devDependencies": {
+    "@types/express": "^x.x.x",
+    "@types/mongoose": "^5.11.96",
+    "@types/node": "^x.x.x",
+    "ts-node-dev": "^x.x.x",
+    "typescript": "^x.x.x"
+  }
+}
