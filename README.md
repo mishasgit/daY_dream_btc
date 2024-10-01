@@ -112,3 +112,8 @@ npm run dev
 cd frontend
 npm start
 ```
+
+### Main screen<br>
+
+<img src="frontend/assets/screenshot.png" alt="Главный экран приложения" width="300">
+<img src="frontend/assets/screenshot2.png" alt="Главный экран приложения" width="300">
