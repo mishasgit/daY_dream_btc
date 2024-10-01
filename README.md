@@ -89,6 +89,15 @@ or
 ```bash
 mongod
 ```
+to kill mongod process use 
+```bash
+pkill mongod
+```
+or 
+```bash
+sudo lsof -i :4000
+kill -9 <PID>
+```
 
 ### 2. Start the backend server
 
