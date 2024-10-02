@@ -1,0 +1,414 @@
+{
+  "orderListId": 10614,
+  "contingencyType": "OCO",
+  "listStatusType": "EXEC_STARTED",
+  "listOrderStatus": "EXECUTING",
+  "listClientOrderId": "eS5E1bbLVVb2pM8JcnmQC4",
+  "transactionTime": 1727827917836,
+  "symbol": "BTCUSDT",
+  "orders": [
+    {
+      "symbol": "BTCUSDT",
+      "orderId": 14695290,
+      "clientOrderId": "WkPw68p6S55A0mtenGkT2s"
+    },
+    {
+      "symbol": "BTCUSDT",
+      "orderId": 14695291,
+      "clientOrderId": "8hblp7bQdOoxmNZqXemc1t"
+    }
+  ],
+  "orderReports": [
+    {
+      "symbol": "BTCUSDT",
+      "orderId": 14695290,
+      "orderListId": 10614,
+      "clientOrderId": "WkPw68p6S55A0mtenGkT2s",
+      "transactTime": 1727827917836,
+      "price": "60650.00000000",
+      "origQty": "0.00492000",
+      "executedQty": "0.00000000",
+      "cummulativeQuoteQty": "0.00000000",
+      "status": "NEW",
+      "timeInForce": "GTC",
+      "type": "STOP_LOSS_LIMIT",
+      "side": "SELL",
+      "stopPrice": "60890.00000000",
+      "workingTime": -1,
+      "selfTradePreventionMode": "EXPIRE_MAKER"
+    },
+    {
+      "symbol": "BTCUSDT",
+      "orderId": 14695291,
+      "orderListId": 10614,
+      "clientOrderId": "8hblp7bQdOoxmNZqXemc1t",
+      "transactTime": 1727827917836,
+      "price": "62943.11000000",
+      "origQty": "0.00492000",
+      "executedQty": "0.00000000",
+      "cummulativeQuoteQty": "0.00000000",
+      "status": "NEW",
+      "timeInForce": "GTC",
+      "type": "LIMIT_MAKER",
+      "side": "SELL",
+      "workingTime": 1727827917836,
+      "selfTradePreventionMode": "EXPIRE_MAKER"
+    }
+  ]
+}
+{
+  "symbol": "BTCUSDT",
+  "buyOrderId": 14695274,
+  "quantity": "0.00492000",
+  "targetPrice": 62943.11032520325,
+  "stopPrice": 60890,
+  "stopLimitPrice": 60650,
+  "status": "SELL_ORDER_PLACED",
+  "isOco": true,
+  "_id": "66fc8fcdb68389e408bca859",
+  "sellOrderId": 14695290,
+  "__v": 0
+}
+
+{
+  "symbol": "BTCUSDT",
+  "orderId": 14695274,
+  "orderListId": -1,
+  "clientOrderId": "ROFPXvujKQHZBUwfYmNqm0",
+  "price": "0.00000000",
+  "origQty": "0.00492000",
+  "executedQty": "0.00492000",
+  "cummulativeQuoteQty": "299.68201140",
+  "status": "FILLED",
+  "timeInForce": "GTC",
+  "type": "MARKET",
+  "side": "BUY",
+  "stopPrice": "0.00000000",
+  "icebergQty": "0.00000000",
+  "time": 1727827915559,
+  "updateTime": 1727827915559,
+  "isWorking": true,
+  "workingTime": 1727827915559,
+  "origQuoteOrderQty": "0.00000000",
+  "selfTradePreventionMode": "EXPIRE_MAKER"
+}
+
+{"symbol":"BTCUSDT","buyOrderId":14695274,"quantity":"0.00492000","targetPrice":62943.11032520325,"stopPrice":60890,"stopLimitPrice":60650,"status":"SELL_ORDER_PLACED","isOco":true,"_id":"66fc8fcdb68389e408bca859","sellOrderId":14695290,"__v":0}
+
+{"symbol":"BTCUSDT","orderId":14695274,"orderListId":-1,"clientOrderId":"ROFPXvujKQHZBUwfYmNqm0","price":"0.00000000","origQty":"0.00492000","executedQty":"0.00492000","cummulativeQuoteQty":"299.68201140","status":"FILLED","timeInForce":"GTC","type":"MARKET","side":"BUY","stopPrice":"0.00000000","icebergQty":"0.00000000","time":1727827915559,"updateTime":1727827915559,"isWorking":true,"workingTime":1727827915559,"origQuoteOrderQty":"0.00000000","selfTradePreventionMode":"EXPIRE_MAKER"}
+
+
+Ордер успешно создан: {"symbol":"BTCUSDT","orderId":14697037,"orderListId":-1,"clientOrderId":"02eaBDTp6XBoWhO2k0hIMn","transactTime":1727828313728,"price":"60830.00000000","origQty":"0.00493000","executedQty":"0.00000000","cummulativeQuoteQty":"0.00000000","status":"NEW","timeInForce":"GTC","type":"LIMIT","side":"BUY","workingTime":1727828313728,"fills":[],"selfTradePreventionMode":"EXPIRE_MAKER"}
+Создаем AutoSellOrder: BTCUSDT 14697037 0.00493 62857.67 60800 60750
+
+
+
+//novye logi
+Скорректированное количество: 0.0049
+Ордер успешно создан: {"symbol":"BTCUSDT","orderId":14709926,"orderListId":-1,"clientOrderId":"Yho98EDbsYehvSWpcL5Uk2","transactTime":1727831237825,"price":"61181.00000000","origQty":"0.00490000","executedQty":"0.00000000","cummulativeQuoteQty":"0.00000000","status":"NEW","timeInForce":"GTC","type":"LIMIT","side":"BUY","workingTime":1727831237825,"fills":[],"selfTradePreventionMode":"EXPIRE_MAKER"}
+Создаем AutoSellOrder: BTCUSDT 14709926 0.0049 65259.73 290 280
+Создаем auto ордер на продажу: BTCUSDT 0.00000000 65259.73
+targetPrice is number: number
+formattedTargetPrice: 65259.73
+Создан автоордер на продажу: {"symbol":"BTCUSDT","buyOrderId":14709926,"quantity":"0.00490000","targetPrice":65259.73,"stopPrice":null,"stopLimitPrice":null,"status":"WAITING_FOR_BUY","isOco":true,"_id":"66fc9cc51466d4f6c5189166","__v":0}
+
+Отформатированные логи:
+
+Скорректированное количество: 0.0049
+
+Ордер успешно создан:
+{
+  "symbol": "BTCUSDT",
+  "orderId": 14709926,
+  "orderListId": -1,
+  "clientOrderId": "Yho98EDbsYehvSWpcL5Uk2",
+  "transactTime": 1727831237825,
+  "price": "61181.00000000",
+  "origQty": "0.00490000",
+  "executedQty": "0.00000000",
+  "cummulativeQuoteQty": "0.00000000",
+  "status": "NEW",
+  "timeInForce": "GTC",
+  "type": "LIMIT",
+  "side": "BUY",
+  "workingTime": 1727831237825,
+  "fills": [],
+  "selfTradePreventionMode": "EXPIRE_MAKER"
+}
+
+Создаем AutoSellOrder: BTCUSDT 14709926 0.0049 65259.73 290 280
+
+Создаем auto ордер на продажу: BTCUSDT 0.00000000 65259.73
+targetPrice is number: number
+formattedTargetPrice: 65259.73
+
+Создан автоордер на продажу:
+{
+  "symbol": "BTCUSDT",
+  "buyOrderId": 14709926,
+  "quantity": "0.00490000",
+  "targetPrice": 65259.73,
+  "stopPrice": null,
+  "stopLimitPrice": null,
+  "status": "WAITING_FOR_BUY",
+  "isOco": true,
+  "_id": "66fc9cc51466d4f6c5189166",
+  "__v": 0
+}
+
+Цена для BTCUSDT: 61202.00000000
+
+Найдено 1 ожидающих ордеров на продажу
+pendingAutoSellOrders:
+[
+  {
+    "_id": "66fc9cc51466d4f6c5189166",
+    "symbol": "BTCUSDT",
+    "buyOrderId": 14709926,
+    "quantity": "0.00490000",
+    "targetPrice": 65259.73,
+    "stopPrice": null,
+    "stopLimitPrice": null,
+    "status": "WAITING_FOR_BUY",
+    "isOco": true,
+    "__v": 0
+  }
+]
+
+Создаем ордер на продажу: BTCUSDT 0.00490000 65259.73
+
+Создан ордер на продажу:
+{
+  "symbol": "BTCUSDT",
+  "orderId": 14710189,
+  "orderListId": -1,
+  "clientOrderId": "OFfkvjA82Ryn5LJXBPHewJ",
+  "transactTime": 1727831279059,
+  "price": "65259.73000000",
+  "origQty": "0.00490000",
+  "executedQty": "0.00000000",
+  "cummulativeQuoteQty": "0.00000000",
+  "status": "NEW",
+  "timeInForce": "GTC",
+  "type": "LIMIT",
+  "side": "SELL",
+  "workingTime": 1727831279059,
+  "fills": [],
+  "selfTradePreventionMode": "EXPIRE_MAKER"
+}
+
+Цена для BTCUSDT: 61202.00000000
+Найдено 1 ожидающих ордеров на продажу
+pendingAutoSellOrders: [{"_id":"66fc9cc51466d4f6c5189166","symbol":"BTCUSDT","buyOrderId":14709926,"quantity":"0.00490000","targetPrice":65259.73,"stopPrice":null,"stopLimitPrice":null,"status":"WAITING_FOR_BUY","isOco":true,"__v":0}]
+Создаем ордер на продажу: BTCUSDT 0.00490000 65259.73
+Создан ордер на продажу: {"symbol":"BTCUSDT","orderId":14710189,"orderListId":-1,"clientOrderId":"OFfkvjA82Ryn5LJXBPHewJ","transactTime":1727831279059,"price":"65259.73000000","origQty":"0.00490000","executedQty":"0.00000000","cummulativeQuoteQty":"0.00000000","status":"NEW","timeInForce":"GTC","type":"LIMIT","side":"SELL","workingTime":1727831279059,"fills":[],"selfTradePreventionMode":"EXPIRE_MAKER"}
+
+
+
+/// 10/02
+// Форматированные логи
+
+// Информация о цене
+console.log("Цена для BTCUSDT: 61202.00000000");
+
+// Информация о ожидающих ордерах на продажу
+console.log("Найдено 1 ожидающих ордеров на продажу");
+console.log("pendingAutoSellOrders:");
+console.log(JSON.stringify([
+  {
+    "_id": "66fc9cc51466d4f6c5189166",
+    "symbol": "BTCUSDT",
+    "buyOrderId": 14709926,
+    "quantity": "0.00490000",
+    "targetPrice": 65259.73,
+    "stopPrice": null,
+    "stopLimitPrice": null,
+    "status": "WAITING_FOR_BUY",
+    "isOco": true,
+    "__v": 0
+  }
+], null, 2));
+
+// Создание ордера на продажу
+console.log("Создаем ордер на продажу: BTCUSDT 0.00490000 65259.73");
+
+// Информация о созданном ордере
+console.log("Создан ордер на продажу:");
+console.log(JSON.stringify({
+  "symbol": "BTCUSDT",
+  "orderId": 14710189,
+  "orderListId": -1,
+  "clientOrderId": "OFfkvjA82Ryn5LJXBPHewJ",
+  "transactTime": 1727831279059,
+  "price": "65259.73000000",
+  "origQty": "0.00490000",
+  "executedQty": "0.00000000",
+  "cummulativeQuoteQty": "0.00000000",
+  "status": "NEW",
+  "timeInForce": "GTC",
+  "type": "LIMIT",
+  "side": "SELL",
+  "workingTime": 1727831279059,
+  "fills": [],
+  "selfTradePreventionMode": "EXPIRE_MAKER"
+}, null, 2));
+
+// Информация о запросе на создание ордера
+console.log("Получен запрос на создание ордера: BTCUSDT BUY 0.00487757 61506 true 67656.6 290 280");
+console.log("Скорректированное количество: 0.00487");
+
+// Информация о успешно созданном ордере
+console.log("Ордер успешно создан:");
+console.log(JSON.stringify({
+  "symbol": "BTCUSDT",
+  "orderId": 71368,
+  "orderListId": -1,
+  "clientOrderId": "c0kBqDhZxogclNpC5Z50lk",
+  "transactTime": 1727892546883,
+  "price": "61506.00000000",
+  "origQty": "0.00487000",
+  "executedQty": "0.00487000",
+  "cummulativeQuoteQty": "299.05696000",
+  "status": "FILLED",
+  "timeInForce": "GTC",
+  "type": "LIMIT",
+  "side": "BUY",
+  "workingTime": 1727892546883,
+  "fills": [
+    {
+      "price": "61408.00000000",
+      "qty": "0.00487000",
+      "commission": "0.00000000",
+      "commissionAsset": "BTC",
+      "tradeId": 31355
+    }
+  ],
+  "selfTradePreventionMode": "EXPIRE_MAKER"
+}, null, 2));
+
+// Создание AutoSellOrder
+console.log("Создаем AutoSellOrder: BTCUSDT 71368 0.00487 67656.6 290 280");
+console.log("Создаем auto ордер на продажу: BTCUSDT 0.00487000 67656.6");
+console.log("targetPrice is number: number");
+console.log("formattedTargetPrice: 67656.60");
+
+// Информация о OCO ордере
+console.log("ocoOrder:");
+console.log(JSON.stringify({
+  "orderListId": 39,
+  "contingencyType": "OCO",
+  "listStatusType": "EXEC_STARTED",
+  "listOrderStatus": "EXECUTING",
+  "listClientOrderId": "gRsA5vWFJ1u46M5hKAsb9H",
+  "transactionTime": 1727892547032,
+  "symbol": "BTCUSDT",
+  "orders": [
+    {
+      "symbol": "BTCUSDT",
+      "orderId": 71369,
+      "clientOrderId": "NsZ6slRyIxtwXfoNdPyG3d"
+    },
+    {
+      "symbol": "BTCUSDT",
+      "orderId": 71370,
+      "clientOrderId": "Icpm3cuPojqQFbQv2niUVo"
+    }
+  ],
+  "orderReports": [
+    {
+      "symbol": "BTCUSDT",
+      "orderId": 71369,
+      "orderListId": 39,
+      "clientOrderId": "NsZ6slRyIxtwXfoNdPyG3d",
+      "transactTime": 1727892547032,
+      "price": "57494.87000000",
+      "origQty": "0.00487000",
+      "executedQty": "0.00000000",
+      "cummulativeQuoteQty": "0.00000000",
+      "status": "NEW",
+      "timeInForce": "GTC",
+      "type": "STOP_LOSS_LIMIT",
+      "side": "SELL",
+      "stopPrice": "59548.25000000",
+      "workingTime": -1,
+      "selfTradePreventionMode": "EXPIRE_MAKER"
+    },
+    {
+      "symbol": "BTCUSDT",
+      "orderId": 71370,
+      "orderListId": 39,
+      "clientOrderId": "Icpm3cuPojqQFbQv2niUVo",
+      "transactTime": 1727892547032,
+      "price": "67656.60000000",
+      "origQty": "0.00487000",
+      "executedQty": "0.00000000",
+      "cummulativeQuoteQty": "0.00000000",
+      "status": "NEW",
+      "timeInForce": "GTC",
+      "type": "LIMIT_MAKER",
+      "side": "SELL",
+      "workingTime": 1727892547032,
+      "selfTradePreventionMode": "EXPIRE_MAKER"
+    }
+  ]
+}, null, 2));
+
+// Информация о созданном автоордере на продажу
+console.log("Создан автоордер на продажу:");
+console.log(JSON.stringify({
+  "symbol": "BTCUSDT",
+  "buyOrderId": 71368,
+  "quantity": "0.00487000",
+  "targetPrice": 67656.6,
+  "stopPrice": 59548.25,
+  "stopLimitPrice": 57494.87,
+  "status": "SELL_ORDER_PLACED",
+  "isOco": true,
+  "_id": "66fd8c42d1da5a2a555cedbb",
+  "sellOrderId": 71369,
+  "__v": 0
+}, null, 2));
+
+Получен запрос на создание ордера: BTCUSDT BUY 0.00487757 61506 true 67656.6 290 280
+Скорректированное количество: 0.00487
+Ордер успешно создан: {"symbol":"BTCUSDT","orderId":71368,"orderListId":-1,"clientOrderId":"c0kBqDhZxogclNpC5Z50lk","transactTime":1727892546883,"price":"61506.00000000","origQty":"0.00487000","executedQty":"0.00487000","cummulativeQuoteQty":"299.05696000","status":"FILLED","timeInForce":"GTC","type":"LIMIT","side":"BUY","workingTime":1727892546883,"fills":[{"price":"61408.00000000","qty":"0.00487000","commission":"0.00000000","commissionAsset":"BTC","tradeId":31355}],"selfTradePreventionMode":"EXPIRE_MAKER"}
+Создаем AutoSellOrder: BTCUSDT 71368 0.00487 67656.6 290 280
+Создаем auto ордер на продажу: BTCUSDT 0.00487000 67656.6
+targetPrice is number: number
+formattedTargetPrice: 67656.60
+ocoOrder: {"orderListId":39,"contingencyType":"OCO","listStatusType":"EXEC_STARTED","listOrderStatus":"EXECUTING","listClientOrderId":"gRsA5vWFJ1u46M5hKAsb9H","transactionTime":1727892547032,"symbol":"BTCUSDT","orders":[{"symbol":"BTCUSDT","orderId":71369,"clientOrderId":"NsZ6slRyIxtwXfoNdPyG3d"},{"symbol":"BTCUSDT","orderId":71370,"clientOrderId":"Icpm3cuPojqQFbQv2niUVo"}],"orderReports":[{"symbol":"BTCUSDT","orderId":71369,"orderListId":39,"clientOrderId":"NsZ6slRyIxtwXfoNdPyG3d","transactTime":1727892547032,"price":"57494.87000000","origQty":"0.00487000","executedQty":"0.00000000","cummulativeQuoteQty":"0.00000000","status":"NEW","timeInForce":"GTC","type":"STOP_LOSS_LIMIT","side":"SELL","stopPrice":"59548.25000000","workingTime":-1,"selfTradePreventionMode":"EXPIRE_MAKER"},{"symbol":"BTCUSDT","orderId":71370,"orderListId":39,"clientOrderId":"Icpm3cuPojqQFbQv2niUVo","transactTime":1727892547032,"price":"67656.60000000","origQty":"0.00487000","executedQty":"0.00000000","cummulativeQuoteQty":"0.00000000","status":"NEW","timeInForce":"GTC","type":"LIMIT_MAKER","side":"SELL","workingTime":1727892547032,"selfTradePreventionMode":"EXPIRE_MAKER"}]}
+Создан автоордер на продажу: {"symbol":"BTCUSDT","buyOrderId":71368,"quantity":"0.00487000","targetPrice":67656.6,"stopPrice":59548.25,"stopLimitPrice":57494.87,"status":"SELL_ORDER_PLACED","isOco":true,"_id":"66fd8c42d1da5a2a555cedbb","sellOrderId":71369,"__v":0}
+
+// Форматированные логи
+
+// Информация о созданном ордере на покупку
+console.log("Создан ордер на покупку:");
+console.log(JSON.stringify({
+  "symbol": "BTCUSDT",
+  "orderId": 75020,
+  "price": "59600.00000000",
+  "origQty": "0.00503000",
+  "status": "NEW",
+  "type": "LIMIT",
+  "side": "BUY"
+}, null, 2));
+
+// Информация о созданном автоордере на продажу
+console.log("Создан автоордер на продажу:");
+console.log(JSON.stringify({
+  "symbol": "BTCUSDT", 
+  "buyOrderId": 75020,
+  "quantity": "0.00503000",
+  "targetPrice": 65560,
+  "status": "WAITING_FOR_BUY",
+  "isOco": true
+}, null, 2));
+
+Получен запрос на создание ордера: BTCUSDT BUY 0.00503356 59600 true 65560 290 280
+Скорректированное количество: 0.00503
+Ордер успешно создан: {"symbol":"BTCUSDT","orderId":75020,"orderListId":-1,"clientOrderId":"rUdOil3WX5m48FVYpGVc9u","transactTime":1727893302173,"price":"59600.00000000","origQty":"0.00503000","executedQty":"0.00000000","cummulativeQuoteQty":"0.00000000","status":"NEW","timeInForce":"GTC","type":"LIMIT","side":"BUY","workingTime":1727893302173,"fills":[],"selfTradePreventionMode":"EXPIRE_MAKER"}
+Создаем AutoSellOrder: BTCUSDT 75020 0.00503 65560 290 280
+Создаем auto ордер на продажу: BTCUSDT 0.00000000 65560
+targetPrice is number: number
+formattedTargetPrice: 65560.00
+Создан автоордер на продажу: {"symbol":"BTCUSDT","buyOrderId":75020,"quantity":"0.00503000","targetPrice":65560,"stopPrice":null,"stopLimitPrice":null,"status":"WAITING_FOR_BUY","isOco":true,"_id":"66fd8f36d1da5a2a555cedcc","__v":0}

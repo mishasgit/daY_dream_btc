@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import axios from "axios";
 import Notification from "./components/Notification";
 
@@ -56,6 +56,9 @@ const App: React.FC = () => {
   const [usdtAmount, setUsdtAmount] = useState<string>("");
   const [estimatedBtcAmount, setEstimatedBtcAmount] = useState<string>("");
   const [currentPrice, setCurrentPrice] = useState<string>("");
+  const [priceChange, setPriceChange] = useState<"up" | "down" | "same">("same");
+  const prevPriceRef = useRef<string>("");
+  const lastChangeRef = useRef<"up" | "down">("up");
   const [balances, setBalances] = useState<Balance[]>([]);
   const [trades, setTrades] = useState<Trade[]>([]);
   const [showTrades, setShowTrades] = useState<boolean>(false);
@@ -85,6 +88,8 @@ const App: React.FC = () => {
   const [stopLossEnabled, setStopLossEnabled] = useState(false);
   const [stopLossPrice, setStopLossPrice] = useState('');
   const [stopLimitPrice, setStopLimitPrice] = useState('');
+  const [stopLossAmount, setStopLossAmount] = useState('');
+  const [stopLimitAmount, setStopLimitAmount] = useState('');
 
   const addNotification = (message: string) => {
     setNotifications((prev) => [...prev, message]);
@@ -137,8 +142,26 @@ const App: React.FC = () => {
         const response = await axios.get(`/api/price?symbol=${symbol}`, {
           headers: setAuthHeader({}),
         });
-        setCurrentPrice(response.data.price);
-        console.log(`Текущая цена ${symbol}: ${response.data.price} USDT`);
+        const newPrice = response.data.price;
+        setCurrentPrice(newPrice);
+        
+        // Сравниваем новую цену с предыдущей
+        if (prevPriceRef.current) {
+          if (parseFloat(newPrice) > parseFloat(prevPriceRef.current)) {
+            setPriceChange("up");
+            lastChangeRef.current = "up";
+          } else if (parseFloat(newPrice) < parseFloat(prevPriceRef.current)) {
+            setPriceChange("down");
+            lastChangeRef.current = "down";
+          } else {
+            setPriceChange("same");
+          }
+        }
+        
+        // Сохраняем текущую цену для следующего авнения
+        prevPriceRef.current = newPrice;
+        
+        console.log(`Текущая цена ${symbol}: ${newPrice} USDT`);
       } catch (error) {
         console.error("Ошибка при получении цены:", error);
       }
@@ -233,12 +256,12 @@ const App: React.FC = () => {
       const stopLimitPriceValue = parseFloat(stopLimitPrice);
       const currentPriceValue = parseFloat(currentPrice);
 
-      if (isNaN(stopLossPriceValue) || isNaN(stopLimitPriceValue)) {
+      if (!isNaN(stopLossPriceValue) || !isNaN(stopLimitPriceValue)) {
         return "Введите корректные значения для стоп-лосс";
       }
 
       if (stopLossPriceValue >= currentPriceValue) {
-        return "Цена стоп-лосс должна быть ниже текущей цены";
+        return "Цена соп-лосс должна быть ниже текущей цены";
       }
 
       if (stopLimitPriceValue >= stopLossPriceValue) {
@@ -266,27 +289,30 @@ const App: React.FC = () => {
         price: isMarketPrice ? undefined : desiredPrice,
         autoSell: autoSellEnabled,
         targetPrice: Number(targetSellPrice),
-        stopPrice: stopLossEnabled ? stopLossPrice : undefined,
-        stopLimitPrice: stopLossEnabled ? stopLimitPrice : undefined,
+        stopLossAmount: stopLossEnabled ? Number(stopLossAmount) : undefined,
+        stopLimitAmount: stopLossEnabled ? Number(stopLimitAmount) : undefined,
         isMarketPrice,
       };
-      console.log("Отправка ордера:", orderData);
 
       let response;
       if (isMarketPrice) {
-        response = await axios.post("/api/market-price-order", {
+        console.log(`stopLossEnabled: ${stopLossEnabled} stopLossPrice: ${stopLossPrice} stopLimitPrice: ${stopLimitPrice} stopLossAmount: ${stopLossAmount} stopLimitAmount: ${stopLimitAmount}`);
+        const marketPriceOrderData = {
           symbol,
           usdtAmount: parseFloat(usdtAmount),
           autoSell: autoSellEnabled,
           desiredProfit: parseFloat(desiredProfit),
-          stopPrice: stopLossEnabled ? parseFloat(stopLossPrice) : undefined,
-          stopLimitPrice: stopLossEnabled ? parseFloat(stopLimitPrice) : undefined,
-        }, {
+          stopLossAmount: stopLossEnabled ? Number(stopLossAmount) : undefined,
+          stopLimitAmount: stopLossEnabled ? Number(stopLimitAmount) : undefined,
+        };
+        console.log("Отправка ордера по текущей цене:", marketPriceOrderData);
+        response = await axios.post("/api/market-price-order", marketPriceOrderData, {
           headers: setAuthHeader({
             "Content-Type": "application/json",
           }),
         });
       } else {
+        console.log("Отправка ордера:", orderData);
         response = await axios.post("/api/order", orderData, {
           headers: setAuthHeader({
             "Content-Type": "application/json",
@@ -399,14 +425,14 @@ const App: React.FC = () => {
       setOrderToDelete(null); // Закрваем модальное окно
     } catch (error) {
       console.error("Ошибка при удалении ордера:", error);
-      alert("Не удалось удалить ордер. Пожалуйста, попробуйте еще раз.");
+      alert("Не удалось удалить ордер. Поалуйста, попроуйте еще раз.");
     }
   };
 
   const handleTogglePendingOrders = async () => {
     setShowPendingOrders(!showPendingOrders);
     if (!showPendingOrders) {
-      // Если мы открываем вкладку, обновляем список ордеров
+      // Если мы открваем вкладку, обновляем список ордеров
       await fetchPendingOrders();
     }
   };
@@ -446,7 +472,7 @@ const App: React.FC = () => {
       fetchPendingOrders();
     } catch (error: any) {
       console.error('Ошибка при создании ордера по текущей цене:', error);
-      alert(`Ошибка при создании ордера по текущей цене: ${error.response?.data?.error || error.message}`);
+      alert(`шибка при создании ордера по текщей цене: ${error.response?.data?.error || error.message}`);
     }
   };
 
@@ -462,13 +488,13 @@ const App: React.FC = () => {
     } else if (autoSellPrice < currentPriceValue * 0.9) {
       setAutoSellPriceWarning("Цена слишком низкая");
     } else if (autoSellPrice > currentPriceValue * 1.5) {
-      setAutoSellPriceWarning("Цена слишком высокая");
+      setAutoSellPriceWarning("Цена слишком высоя");
     } else {
       setAutoSellPriceWarning(null);
     }
   };
 
-  // Обновляем обработчик из��е��ения желаемой прибыли
+  // Обновляем обработчик изеения желаемой прибыли
   const handleDesiredProfitChange = (value: string) => {
     setDesiredProfit(value);
     if (desiredPrice) {
@@ -499,93 +525,128 @@ const App: React.FC = () => {
     }
   };
 
+  const renderPriceArrow = () => {
+    const arrowDirection = priceChange === "same" ? lastChangeRef.current : priceChange;
+    if (arrowDirection === "up") {
+      return <span className="text-green-500 ml-2">&#9650;</span>; // Зеленая стрелка вверх
+    } else if (arrowDirection === "down") {
+      return <span className="text-red-500 ml-2">&#9660;</span>; // Красная стрелка вниз
+    }
+    return null;
+  };
+
+  const handleOrderTypeChange = (type: "BUY" | "SELL") => {
+    setOrderType(type);
+    // Здесь можно добавить дополнительную логику при смене типа ордера
+  };
+
   return (
     <div className="max-w-4xl mx-auto p-4 bg-gray-900 rounded-lg shadow-md text-gray-200">
       <h1 className="text-2xl font-bold text-center text-gray-100 mb-6">
-        Торговый бот Binance
+        Aoro
+        <span className="text-gray-400 text-sm"> (Binance API)</span>
+        <div>
+          <h2 className="max-w-4xl mx-auto bg-gray-900 rounded-lg shadow-md text-gray-200 text-sm">day trading dream machine</h2>
+        </div>
       </h1>
       <div className="space-y-6">
+      <div>
+              <div className="block text-2xl font-medium text-gray-200 text-center">
+                <span className="text-gray-200 font-bold">
+                <span className="blocktext-sm font-medium text-gray-200">
+                Текущая цена:
+              </span>
+                  {currentPrice ? ` ${currentPrice} USDT` : "Загрузка..."}
+                </span>
+                {renderPriceArrow()}
+              </div>
+            </div>
         <div>
-          <h2 className="text-xl font-semibold mb-4 text-gray-100">Баланс аккаунта</h2>
-          <div className="overflow-x-auto">
-            <table className="min-w-full bg-gray-800 border border-gray-700">
-              <thead>
-                <tr className="bg-gray-700">
-                  <th className="py-2 px-4 border-b border-gray-600">Актив</th>
-                  <th className="py-2 px-4 border-b border-gray-600">Доступно</th>
-                  <th className="py-2 px-4 border-b border-gray-600">Заблокировано</th>
-                </tr>
-              </thead>
-              <tbody>
-                {balances.map((balance) => (
-                  <tr key={balance.asset}>
-                    <td className="py-2 px-4 border-b border-gray-700">{balance.asset}</td>
-                    <td className="py-2 px-4 border-b border-gray-700">
-                      {parseFloat(balance.free).toFixed(8)}
-                    </td>
-                    <td className="py-2 px-4 border-b border-gray-700">
-                      {parseFloat(balance.locked).toFixed(8)}
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+          <h2 className="text-xl font-semibold mb-4 text-gray-100 text-center">Баланс аккаунта</h2>
+          <div className="flex flex-wrap justify-center gap-4">
+            {balances.map((balance) => (
+              <div key={balance.asset} className="balance-item flex items-center gap-2 bg-gray-800 p-2 rounded">
+                <span className="font-bold text-gray-200">{balance.asset}:</span>
+                <span className="px-2 py-1 rounded bg-green-500 text-white text-sm">
+                  {parseFloat(balance.free).toFixed(8)}
+                </span>
+                {parseFloat(balance.locked) > 0 && (
+                  <span className="px-2 py-1 rounded bg-red-500 text-white text-sm">
+                    {parseFloat(balance.locked).toFixed(8)}
+                  </span>
+                )}
+              </div>
+            ))}
           </div>
         </div>
 
         <div>
           <form onSubmit={handleOrder} className="space-y-4">
-            <div>
-              <label
-                htmlFor="orderType"
-                className="block text-sm font-medium text-gray-200 mb-1"
-              >
+            <div className="mb-4">
+              <label className="block text-sm font-medium text-gray-200 mb-2">
                 Тип ордера:
               </label>
-              <select
-                id="orderType"
-                value={orderType}
-                onChange={(e) => setOrderType(e.target.value as "BUY" | "SELL")}
-                className="w-full px-3 py-2 bg-gray-700 text-gray-200 border border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-              >
-                <option value="BUY">Купить</option>
-                <option value="SELL">Продать</option>
-              </select>
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-200 mb-1">
-                Текущая цена:
-              </label>
-              <div className="w-full px-3 py-2 bg-gray-700 text-gray-200 border border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
-                {currentPrice ? `${currentPrice} USDT` : "Загрузка..."}
+              <div className="flex space-x-4">
+                <button
+                  type="button"
+                  onClick={() => handleOrderTypeChange("BUY")}
+                  className={`flex-1 py-2 px-4 rounded-md font-medium transition-all duration-300 ${
+                    orderType === "BUY"
+                      ? "bg-green-600 text-white"
+                      : "bg-gray-700 text-gray-300 hover:bg-gray-600"
+                  }`}
+                >
+                  Купить
+                </button>
+                <button
+                  type="button"
+                  onClick={() => handleOrderTypeChange("SELL")}
+                  className={`flex-1 py-2 px-4 rounded-md font-medium transition-all duration-300 ${
+                    orderType === "SELL"
+                      ? "bg-red-600 text-white"
+                      : "bg-gray-700 text-gray-300 hover:bg-gray-600"
+                  }`}
+                >
+                  Продать
+                </button>
               </div>
             </div>
             <div>
-              <label
-                htmlFor="desiredPrice"
+              {!isMarketPrice && (
+                <label
+                  htmlFor="desiredPrice"
                 className="block text-sm font-medium text-gray-200 mb-1"
               >
                 Желаемая цена (USDT):
               </label>
+              )}
               <div className="flex items-center space-x-2">
-                <input
-                  id="desiredPrice"
-                  type="number"
-                  value={desiredPrice}
-                  onChange={(e) => setDesiredPrice(e.target.value)}
-                  disabled={isMarketPrice}
-                  className="w-full px-3 py-2 bg-gray-700 text-gray-200 border border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                />
+                {!isMarketPrice && (
+                  <input
+                    id="desiredPrice"
+                    type="number"
+                    value={desiredPrice}
+                    onChange={(e) => setDesiredPrice(e.target.value)}
+                    className="w-full px-3 py-2 bg-gray-700 text-gray-200 border border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  />
+                )}
                 <button
                   type="button"
                   onClick={handleMarketPriceToggle}
-                  className={`h-10 w-80 px-4 rounded-md text-white font-medium transition-all duration-300 ${
+                  className={`h-10 w-full px-2 rounded-md text-white font-medium transition-all duration-300 ${
                     isMarketPrice
-                      ? "bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700"
+                      ? "bg-gradient-to-r from-orange-500 to-red-600 hover:from-orange-600 hover:to-red-700"
                       : "bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700"
-                  } focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50`}
+                  } focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 w-70`}
                 >
-                  {isMarketPrice ? "Отменить текущую цену" : "Текущая цена"}
+                  {isMarketPrice ? (
+                    <>
+                      <span className="sm:hidden">ОТМЕНА МАРКЕТ</span>
+                      <span className="hidden sm:inline">ОТМЕНИТЬ МАРКЕТ ЦЕНУ</span>
+                    </>
+                  ) : (
+                    "МАРКЕТ ЦЕНА"
+                  )}
                 </button>
               </div>
             </div>
@@ -620,16 +681,19 @@ const App: React.FC = () => {
                   : `${maxBtcAmount.toFixed(8)} BTC`}
               </div>
             </div>
-            {orderType === "BUY" && (
+            {orderType === "BUY" && !isMarketPrice && (
               <div>
                 <label className="block text-sm font-medium text-gray-200 mb-1">
                   Предполагаемое количество BTC:
                 </label>
-                <div className="block text-2xl font-medium text-gray-200 mb-1">
+                <div className="block text-sm font-medium text-gray-200 mb-1">
                   {estimatedBtcAmount ? (
                     estimatedBtcAmount
                   ) : (
-                    <span className="text-gray-400">Введите цену и сумму USDT</span>
+                    <div>
+                    <span className="text-gray-400">Введите цену и сумму USDT </span>
+                    <span className="text-gray-400 text-xl font-bold text-red-500">!</span>
+                    </div>
                   )}
                 </div>
               </div>
@@ -666,11 +730,6 @@ const App: React.FC = () => {
                         <span className="text-gray-400">
                           Целевая цена продажи: {targetSellPrice} USDT
                         </span>
-                        {autoSellPriceWarning && (
-                          <span className="text-red-500 ml-2">
-                            ({autoSellPriceWarning})
-                          </span>
-                        )}
                       </div>
                     )}
                     <div className="flex items-center mb-2">
@@ -689,16 +748,16 @@ const App: React.FC = () => {
                       <>
                         <input
                           type="number"
-                          value={stopLossPrice}
-                          onChange={(e) => setStopLossPrice(e.target.value)}
-                          placeholder="Цена стоп-лосс (USDT)"
+                          value={stopLossAmount}
+                          onChange={(e) => setStopLossAmount(e.target.value)}
+                          placeholder="Стоп-лосс сумма (USDT)"
                           className="w-full px-3 py-2 bg-gray-700 text-gray-200 border border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent mb-2"
                         />
                         <input
                           type="number"
-                          value={stopLimitPrice}
-                          onChange={(e) => setStopLimitPrice(e.target.value)}
-                          placeholder="Лимитная цена стоп-лосс (USDT)"
+                          value={stopLimitAmount}
+                          onChange={(e) => setStopLimitAmount(e.target.value)}
+                          placeholder="Лимитная сумма стоп-лосс (USDT)"
                           className="w-full px-3 py-2 bg-gray-700 text-gray-200 border border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                         />
                       </>
@@ -722,7 +781,7 @@ const App: React.FC = () => {
             onClick={handleTogglePendingOrders}
             className="flex items-center justify-between cursor-pointer bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 w-full"
           >
-            <span>Отложенные ордеры</span>
+            <span>Отложенные ордры</span>
             <svg
               className={`w-4 h-4 transition-transform duration-200 ${
                 showPendingOrders ? "transform rotate-90" : ""

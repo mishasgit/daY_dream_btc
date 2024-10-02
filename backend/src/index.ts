@@ -83,17 +83,28 @@ function authMiddleware(req: Request, res: Response, next: NextFunction) {
 app.use("/api", authMiddleware);
 
 // Новая функция для создания ордера на автопродажу
-async function createAutoSellOrder(buyOrder: any, targetPrice: number, stopPrice?: number, stopLimitPrice?: number) {
-  console.log(`Создаем auto ордер на продажу: ${buyOrder.symbol} ${buyOrder.executedQty || buyOrder.origQty} ${targetPrice}`);
+async function createAutoSellOrder(buyOrder: any, targetPrice: number, stopLossAmount?: number, stopLimitAmount?: number) {
+  console.log(`Создаем auto ордер на продажу: ${buyOrder.symbol} ${buyOrder.origQty} ${targetPrice}`);
   try {
-    console.log(`targetPrice is  number: ${typeof targetPrice}`);
+    console.log(`targetPrice is number: ${typeof targetPrice}`);
     let formattedTargetPrice = targetPrice.toFixed(2);
     console.log(`formattedTargetPrice: ${formattedTargetPrice}`);
+
+    const buyPrice = parseFloat(buyOrder.price);
+    const buyQuantity = parseFloat(buyOrder.origQty);
+    const totalCost = buyPrice * buyQuantity;
+
+    let stopPrice: number | undefined;
+    let stopLimitPrice: number | undefined;
+    if (stopLossAmount && stopLimitAmount) {
+      stopPrice = Number((stopLossAmount / buyQuantity).toFixed(2));
+      stopLimitPrice = Number((stopLimitAmount / buyQuantity).toFixed(2));
+    }
 
     const autoSellOrder = new AutoSellOrder({
       symbol: buyOrder.symbol,
       buyOrderId: buyOrder.orderId,
-      quantity: buyOrder.executedQty || buyOrder.origQty,
+      quantity: buyOrder.origQty,
       targetPrice: targetPrice,
       stopPrice: stopPrice,
       stopLimitPrice: stopLimitPrice,
@@ -102,15 +113,16 @@ async function createAutoSellOrder(buyOrder: any, targetPrice: number, stopPrice
     });
 
     if (buyOrder.status === "FILLED") {
-      if (autoSellOrder.isOco) {
+      if (autoSellOrder.isOco && stopPrice && stopLimitPrice) {
         const ocoOrder = await client.orderOco({
           symbol: buyOrder.symbol,
           side: "SELL",
           quantity: buyOrder.executedQty,
           price: formattedTargetPrice,
-          stopPrice: stopPrice!.toFixed(2),
-          stopLimitPrice: stopLimitPrice!.toFixed(2),
+          stopPrice: stopPrice.toString(),
+          stopLimitPrice: stopLimitPrice.toString(),
         });
+        console.log(`ocoOrder: ${JSON.stringify(ocoOrder)}`);
         autoSellOrder.sellOrderId = ocoOrder.orderReports[0].orderId;
       } else {
         const sellOrder = await client.order({
@@ -142,6 +154,7 @@ async function checkBuyOrdersAndCreateSellOrders() {
     console.log(
       `Найдено ${pendingAutoSellOrders.length} ожидающих ордеров на продажу`
     );
+    console.log(`pendingAutoSellOrders: ${JSON.stringify(pendingAutoSellOrders)}`);
 
     for (const autoSellOrder of pendingAutoSellOrders) {
       const order = await client.getOrder({
@@ -198,8 +211,8 @@ async function createMarketPriceOrder(
   usdtAmount: number,
   autoSell: boolean,
   desiredProfit: number | null,
-  stopPrice?: number,
-  stopLimitPrice?: number
+  stopLossAmount?: number,
+  stopLimitAmount?: number
 ) {
   try {
     // Получаем текущую цену
@@ -244,7 +257,7 @@ async function createMarketPriceOrder(
         const targetPrice = targetTotal / buyQuantity;
         console.log(`Целевая цена: ${targetPrice}`);
 
-        await createAutoSellOrder(orderStatus, targetPrice, stopPrice, stopLimitPrice);
+        await createAutoSellOrder(orderStatus, targetPrice, stopLossAmount, stopLimitAmount);
       }
 
       return { success: true, order: orderStatus };
@@ -261,11 +274,11 @@ async function createMarketPriceOrder(
 
 // Новый эндпоинт для создания ордера по текущей цене
 app.post("/api/market-price-order", async (req: Request, res: Response) => {
-  const { symbol, usdtAmount, autoSell, desiredProfit, stopPrice, stopLimitPrice } = req.body;
-  console.log(`Получен запрос на создание ордера по текущей цене: ${symbol} ${usdtAmount} ${autoSell} ${desiredProfit} ${stopPrice} ${stopLimitPrice}`);
+  const { symbol, usdtAmount, autoSell, desiredProfit, stopLossAmount, stopLimitAmount } = req.body;
+  console.log(`Получен запрос на создание ордера по текущей цене: ${symbol} ${usdtAmount} ${autoSell} ${desiredProfit} ${stopLossAmount} ${stopLimitAmount}`);
 
   try {
-    const result = await createMarketPriceOrder(symbol, usdtAmount, autoSell, desiredProfit, stopPrice, stopLimitPrice);
+    const result = await createMarketPriceOrder(symbol, usdtAmount, autoSell, desiredProfit, stopLossAmount, stopLimitAmount);
     res.json(result);
   } catch (error: any) {
     console.error(`Ошибка при создании ордера по текущей цене: ${error.body || error.message}`);
@@ -274,8 +287,8 @@ app.post("/api/market-price-order", async (req: Request, res: Response) => {
 });
 
 app.post("/api/order", async (req: Request, res: Response) => {
-  const { symbol, side, quantity, price, autoSell, targetPrice, stopPrice, stopLimitPrice } = req.body;
-  console.log(`Получен запрос на создание ордера: ${symbol} ${side} ${quantity} ${price} ${autoSell} ${targetPrice} ${stopPrice} ${stopLimitPrice}`);
+  const { symbol, side, quantity, price, autoSell, targetPrice, stopLossAmount, stopLimitAmount } = req.body;
+  console.log(`Получен запрос на создание ордера: ${symbol} ${side} ${quantity} ${price} ${autoSell} ${targetPrice} ${stopLossAmount} ${stopLimitAmount}`);
 
   try {
     const adjustedQuantity = adjustQuantity(symbol, quantity);
@@ -306,9 +319,9 @@ app.post("/api/order", async (req: Request, res: Response) => {
 
     // Если включена автопродажа, создаем запись для автоордера на продажу
     if (side === "BUY" && autoSell && targetPrice) {
-      console.log(`Создаем AutoSellOrder: ${symbol} ${order.orderId} ${adjustedQuantity} ${targetPrice} ${stopPrice} ${stopLimitPrice}`);
+      console.log(`Создаем AutoSellOrder: ${symbol} ${order.orderId} ${adjustedQuantity} ${targetPrice} ${stopLossAmount} ${stopLimitAmount}`);
       try {
-        await createAutoSellOrder(order, targetPrice, stopPrice, stopLimitPrice);
+        await createAutoSellOrder(order, targetPrice, stopLossAmount, stopLimitAmount);
       } catch (error) {
         console.error(`Ошибка при создании AutoSellOrder: ${error}`);
       }
