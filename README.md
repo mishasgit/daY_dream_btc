@@ -1,4 +1,4 @@
-# Day Trader Dreammachine BTC (Binance)
+# Aoro Day Trader Dreammachine BTC (Binance)
 
 This project is a trading bot for Binance, consisting of a React frontend and a Node.js backend using MongoDB as the database.
 it trades BTCUSDT pair only for now </br>
